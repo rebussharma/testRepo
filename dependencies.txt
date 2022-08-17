@@ -1,2 +1,2 @@
 psycopg2-binary
-pprint==3.9
+pprint
