@@ -1,2 +1,2 @@
-psycopg2==2.9.3
+psycopg2-binary
 pprint==3.9
