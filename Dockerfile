@@ -5,7 +5,6 @@ COPY Main.py ${LAMBDA_TASK_ROOT}
 
 # Install the function's dependencies using file requirements.txt
 # from your project folder.
-RUN pip3 install libpq-dev python-dev
 COPY dependencies.txt  .
 RUN  pip3 install -r dependencies.txt --target "${LAMBDA_TASK_ROOT}"
 
