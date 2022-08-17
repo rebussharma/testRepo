@@ -5,8 +5,7 @@ COPY Main.py ${LAMBDA_TASK_ROOT}
 
 # Install the function's dependencies using file requirements.txt
 # from your project folder.
-RUN apk update
-RUN apk add postgresql-dev gcc python3-dev musl-devCOPY dependencies.txt  .
+RUN pip3 install libpq-dev python-dev
 COPY dependencies.txt  .
 RUN  pip3 install -r dependencies.txt --target "${LAMBDA_TASK_ROOT}"
 
