@@ -1,13 +1,18 @@
-FROM public.ecr.aws/lambda/python:3.8
+version: 0.2
 
-# Copy function code
-COPY app.py ${LAMBDA_TASK_ROOT}
-
-# Install the function's dependencies using file requirements.txt
-# from your project folder.
-
-COPY requirements.txt  .
-RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
-
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "Main.handler" ]
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+    #  - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
