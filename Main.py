@@ -1,9 +1,8 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-import json
 from pprint import pprint
 
-if __name__ == '__main__':
+def handler(event, context):
 
     # RealDictCursor turns the result set into a dictionary so you can reference columns by their names.
     connection = psycopg2.connect(
